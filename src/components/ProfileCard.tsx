@@ -4,21 +4,26 @@ import { absoluteMedia } from "@/lib/api";
 import { Linkedin, Twitter, Github, Globe } from "lucide-react"; // ⬅️ NUEVO
 
 export default function ProfileCard({ data }: { data: any }) {
+    // Extrae la información básica y redes sociales del usuario
     const basic = data?.basic_info ?? {};
     const redes = basic?.redes_sociales ?? {};
 
+    // Datos principales del usuario
     const first = basic?.first_name ?? "";
     const last = basic?.last_name ?? "";
     const email = basic?.email ?? "";
     const foto = absoluteMedia(basic?.foto);
     const name = `${first} ${last}`.trim();
+    // Imagen de respaldo si no hay foto
     const fotoFallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(
         name
     )}`;
 
+    // Otros datos del perfil
     const tipoUsuario = data?.tipo_usuario ?? "";
     const verificado = data?.esta_verificado ? "Sí" : "No";
 
+    // Listas de educación, experiencia, habilidades y portafolio
     const educacion = Array.isArray(data?.educacion) ? data.educacion : [];
     const experiencia = Array.isArray(data?.experiencia_laboral)
         ? data.experiencia_laboral
@@ -31,6 +36,7 @@ export default function ProfileCard({ data }: { data: any }) {
     return (
         <div className="card">
             <div className="flex gap-6">
+                {/* Foto de perfil */}
                 <div className="shrink-0">
                     <img
                         src={foto || fotoFallback}
@@ -42,6 +48,7 @@ export default function ProfileCard({ data }: { data: any }) {
                 <div className="flex-1">
                     <h2 className="card-title">Perfil</h2>
 
+                    {/* Información principal del usuario */}
                     <div className="grid-2 mt-2">
                         <div>
                             <p className="kv-label">Nombre</p>
@@ -64,6 +71,7 @@ export default function ProfileCard({ data }: { data: any }) {
                             <p className="kv-label">Tipo de usuario</p>
                             <p className="kv-value">{tipoUsuario || "—"}</p>
                         </div>
+                        {/* Biografía con espacios colapsados */}
                         <div style={{ gridColumn: "1/-1" }}>
                             <p className="kv-label">Biografía</p>
                             <p
@@ -92,6 +100,7 @@ export default function ProfileCard({ data }: { data: any }) {
                         </div>
                     </div>
 
+                    {/* Redes sociales */}
                     <div className="section">
                         <p className="kv-label">Redes</p>
                         <div className="flex gap-3">
@@ -134,6 +143,7 @@ export default function ProfileCard({ data }: { data: any }) {
                         </div>
                     </div>
 
+                    {/* Sección de educación */}
                     {educacion.length > 0 && (
                         <div className="section">
                             <h3 className="section-title">Educación</h3>
@@ -154,6 +164,7 @@ export default function ProfileCard({ data }: { data: any }) {
                         </div>
                     )}
 
+                    {/* Sección de experiencia laboral */}
                     {experiencia.length > 0 && (
                         <div className="section">
                             <h3 className="section-title">Experiencia</h3>
@@ -168,6 +179,7 @@ export default function ProfileCard({ data }: { data: any }) {
                                                 ? "actualidad"
                                                 : x.fecha_fin || "fin"}
                                         </div>
+                                        {/* Habilidades asociadas a la experiencia */}
                                         {Array.isArray(x.habilidades) &&
                                             x.habilidades.length > 0 && (
                                                 <div className="muted">
@@ -179,6 +191,7 @@ export default function ProfileCard({ data }: { data: any }) {
                                                         .join(", ")}
                                                 </div>
                                             )}
+                                        {/* Funciones realizadas */}
                                         {x.funciones && (
                                             <p
                                                 style={{
@@ -195,6 +208,7 @@ export default function ProfileCard({ data }: { data: any }) {
                         </div>
                     )}
 
+                    {/* Sección de habilidades */}
                     {habilidades.length > 0 && (
                         <div className="section">
                             <h3 className="section-title">Habilidades</h3>
@@ -214,6 +228,7 @@ export default function ProfileCard({ data }: { data: any }) {
                         </div>
                     )}
 
+                    {/* Sección de portafolio */}
                     {portafolio.length > 0 && (
                         <div className="section">
                             <h3 className="section-title">Portafolio</h3>
@@ -224,11 +239,13 @@ export default function ProfileCard({ data }: { data: any }) {
                                         <span className="muted">
                                             {p.fecha || ""}
                                         </span>
+                                        {/* Descripción del proyecto */}
                                         {p.descripcion && (
                                             <div className="muted">
                                                 {p.descripcion}
                                             </div>
                                         )}
+                                        {/* Enlace al proyecto */}
                                         {p.url && (
                                             <div>
                                                 <a

@@ -6,13 +6,16 @@ import React from "react";
 export default function Navbar() {
     const pathname = usePathname();
     const router = useRouter();
+    // Estado para saber si hay token de sesión
     const [hasToken, setHasToken] = React.useState(false);
 
+    // Actualiza el estado del token cuando cambia la ruta
     React.useEffect(() => {
         if (typeof window === "undefined") return;
         setHasToken(!!localStorage.getItem("access_token"));
     }, [pathname]);
 
+    // Función para cerrar sesión y redirigir al login
     function logout() {
         if (typeof window !== "undefined") {
             localStorage.removeItem("access_token");
@@ -24,6 +27,7 @@ export default function Navbar() {
     return (
         <header className="navbar">
             <div className="container py-6 flex items-center justify-between">
+                {/* Título de la aplicación */}
                 <div className="navbar-title">
                     Prueba Técnica – Cristian Blanco
                 </div>
@@ -31,6 +35,7 @@ export default function Navbar() {
                 {/* Oculta todo el grupo de navegación en /login */}
                 {pathname !== "/login" && (
                     <nav className="flex gap-2">
+                        {/* Enlace al perfil */}
                         <Link
                             href="/"
                             className={`nav-link ${
@@ -39,6 +44,7 @@ export default function Navbar() {
                         >
                             Perfil
                         </Link>
+                        {/* Enlace a edición */}
                         <Link
                             href="/editar"
                             className={`nav-link ${
@@ -48,6 +54,7 @@ export default function Navbar() {
                             Editar
                         </Link>
 
+                        {/* Botón de salir si hay token, si no muestra Login */}
                         {hasToken ? (
                             <button
                                 type="button"

@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
 import { toast } from "sonner";
 
-// Selectores
+// Opciones para los selectores de tipo de usuario y verificado
 const TIPO_USUARIO_OPCIONES = [
     { value: "instructor", label: "Instructor" },
     { value: "estudiante", label: "Estudiante" },
@@ -23,13 +23,14 @@ export default function EditarPage() {
     const router = useRouter();
     const { accessToken } = useAuthStore();
 
+    // Estado para mostrar loading en el botón y pantalla de carga inicial
     const [loading, setLoading] = React.useState(false);
     const [initializing, setInitializing] = React.useState(true);
 
-    // guardamos el data completo para el resumen
+    // Guardamos el perfil completo para mostrar el resumen
     const [perfilData, setPerfilData] = React.useState<any>(null);
 
-    // estado del formulario (solo los campos que tu API acepta en PUT)
+    // Estado del formulario, solo los campos que acepta el backend en PUT
     const [form, setForm] = React.useState<any>({
         user: { first_name: "", last_name: "" },
         telefono: "",
@@ -46,17 +47,21 @@ export default function EditarPage() {
         _username_ro: "",
     });
 
+    // Efecto para cargar los datos del perfil al montar el componente
     React.useEffect(() => {
         if (!accessToken) {
+            // Si no hay token, redirige a login
             router.replace("/login");
             return;
         }
         (async () => {
             try {
+                // Llama a la API para obtener el perfil
                 const res = await apiGetPerfil();
                 const data: any = res?.data ?? {};
                 setPerfilData(data);
 
+                // Extrae los datos y los pone en el formulario
                 const u = data?.basic_info ?? {};
                 setForm({
                     user: {
@@ -77,6 +82,7 @@ export default function EditarPage() {
                     _username_ro: u.username || "",
                 });
             } catch (err: any) {
+                // Muestra error si falla la carga
                 toast.error(err?.message || "No fue posible cargar el perfil");
             } finally {
                 setInitializing(false);
@@ -84,14 +90,17 @@ export default function EditarPage() {
         })();
     }, [accessToken, router]);
 
+    // Función para actualizar el estado del formulario
     function update<K extends keyof typeof form>(key: K, val: any) {
         setForm((prev: any) => ({ ...prev, [key]: val }));
     }
 
+    // Maneja el envío del formulario
     async function onSubmit(e: React.FormEvent) {
         e.preventDefault();
         setLoading(true);
         try {
+            // Validaciones básicas
             if (!form.user.first_name.trim() || !form.user.last_name.trim()) {
                 throw new Error("Nombre y apellido son obligatorios");
             }
@@ -99,7 +108,7 @@ export default function EditarPage() {
                 throw new Error("Selecciona un tipo de usuario");
             }
 
-            // payload exacto que acepta tu backend (sin tipo_naturaleza)
+            // Construye el payload para el backend
             const payload = {
                 user: {
                     first_name: form.user.first_name.trim(),
@@ -116,12 +125,14 @@ export default function EditarPage() {
                 esta_verificado: form.esta_verificado, // "true" | "false"
             };
 
+            // Llama a la API para actualizar el perfil
             const res = await apiPutPerfil(payload);
             const ok = res?.status ? res.status === "success" : true;
             const msg = res?.message || "Perfil actualizado correctamente";
             if (!ok) throw new Error(msg);
             toast.success(msg);
         } catch (err: any) {
+            // Muestra errores de campos específicos si existen
             const detail = err?.response?.data;
             const fieldErrors = detail?.data;
             if (fieldErrors && typeof fieldErrors === "object") {
@@ -148,20 +159,22 @@ export default function EditarPage() {
 
     return (
         <div className="min-h-screen">
+            {/* Barra de navegación */}
             <Navbar />
             <main className="container py-6 space-y-6">
-                {/* Subir foto va en EDITAR */}
+                {/* Componente para subir foto */}
                 <PhotoUploader />
 
-                {/* ---------- Formulario ---------- */}
+                {/* ---------- Formulario de edición ---------- */}
                 <div className="card">
                     <h3 className="section-title">Editar perfil</h3>
 
+                    {/* Muestra pantalla de carga mientras se obtienen los datos */}
                     {initializing ? (
                         <p className="muted">Cargando datos…</p>
                     ) : (
                         <form className="grid-2 gap-4 mt-4" onSubmit={onSubmit}>
-                            {/* Solo lectura: email y username */}
+                            {/* Campos solo lectura: email y username */}
                             <div>
                                 <label className="label">
                                     Correo (solo lectura)
@@ -183,6 +196,7 @@ export default function EditarPage() {
                                 />
                             </div>
 
+                            {/* Campo nombre */}
                             <div>
                                 <label className="label">Nombre</label>
                                 <input
@@ -202,6 +216,7 @@ export default function EditarPage() {
                                 />
                             </div>
 
+                            {/* Campo apellido */}
                             <div>
                                 <label className="label">Apellido</label>
                                 <input
@@ -221,6 +236,7 @@ export default function EditarPage() {
                                 />
                             </div>
 
+                            {/* Campo teléfono */}
                             <div>
                                 <label className="label">Teléfono</label>
                                 <input
@@ -233,6 +249,7 @@ export default function EditarPage() {
                                 />
                             </div>
 
+                            {/* Selector tipo de usuario */}
                             <div>
                                 <label className="label">Tipo de usuario</label>
                                 <select
@@ -250,6 +267,7 @@ export default function EditarPage() {
                                 </select>
                             </div>
 
+                            {/* Campo biografía */}
                             <div style={{ gridColumn: "1/-1" }}>
                                 <label className="label">Biografía</label>
                                 <textarea
@@ -261,6 +279,7 @@ export default function EditarPage() {
                                 />
                             </div>
 
+                            {/* Campo documento */}
                             <div>
                                 <label className="label">Documento</label>
                                 <input
@@ -273,6 +292,7 @@ export default function EditarPage() {
                                 />
                             </div>
 
+                            {/* Campo LinkedIn */}
                             <div>
                                 <label className="label">LinkedIn</label>
                                 <input
@@ -285,6 +305,7 @@ export default function EditarPage() {
                                 />
                             </div>
 
+                            {/* Campo Twitter */}
                             <div>
                                 <label className="label">Twitter</label>
                                 <input
@@ -297,6 +318,7 @@ export default function EditarPage() {
                                 />
                             </div>
 
+                            {/* Campo GitHub */}
                             <div>
                                 <label className="label">GitHub</label>
                                 <input
@@ -309,6 +331,7 @@ export default function EditarPage() {
                                 />
                             </div>
 
+                            {/* Campo sitio web */}
                             <div>
                                 <label className="label">Sitio web</label>
                                 <input
@@ -321,6 +344,7 @@ export default function EditarPage() {
                                 />
                             </div>
 
+                            {/* Selector verificado */}
                             <div>
                                 <label className="label">¿Verificado?</label>
                                 <select
@@ -341,6 +365,7 @@ export default function EditarPage() {
                                 </select>
                             </div>
 
+                            {/* Botón de guardar cambios */}
                             <div style={{ gridColumn: "1/-1" }}>
                                 <button
                                     type="submit"
