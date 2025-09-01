@@ -1,0 +1,384 @@
+:root {
+    /* colors */
+    --bg: #f8fafc;
+    --fg: #0f172a;
+    --muted: #64748b;
+    --card: #fff;
+    --border: #e2e8f0;
+    --ring: #9399a1;
+    --indigo-600: #4f46e5;
+    --indigo-700: #4338ca;
+    --rose-500: #f43f5e;
+    --rose-600: #e11d48;
+
+    /* radius / shadow */
+    --radius: 16px;
+    --shadow: 0 1px 2px rgba(2, 6, 23, 0.06), 0 1px 1px rgba(2, 6, 23, 0.08);
+
+    /* spacing */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-6: 24px;
+    --space-8: 32px;
+
+    /* typography scale */
+    --fs-xs: 12px;
+    --fs-sm: 14px;
+    --fs-base: 16px;
+    --fs-lg: 18px;
+    --fs-xl: 20px;
+    --lh: 1.5;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background: var(--bg);
+    color: var(--fg);
+    font: var(--fs-base) / var(--lh) system-ui, -apple-system, Segoe UI, Roboto,
+        Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, Apple Color Emoji,
+        Segoe UI Emoji;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* ---------- Layout ---------- */
+.container {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+}
+
+.min-h-screen {
+    min-height: 100vh;
+}
+
+.flex {
+    display: flex;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.gap-2 {
+    gap: var(--space-2);
+}
+
+.gap-3 {
+    gap: var(--space-3);
+}
+
+.gap-4 {
+    gap: var(--space-4);
+}
+
+.gap-6 {
+    gap: var(--space-6);
+}
+
+.mt-2 {
+    margin-top: var(--space-2);
+}
+
+.mt-4 {
+    margin-top: var(--space-4);
+}
+
+.mb-4 {
+    margin-bottom: var(--space-4);
+}
+
+.py-6 {
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-6);
+}
+
+.pb-10 {
+    padding-bottom: 40px;
+}
+
+.space-y-6 > * + * {
+    margin-top: var(--space-6);
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+    .grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ---------- Surfaces ---------- */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+}
+
+.navbar-title {
+    font-weight: 700;
+    font-size: var(--fs-lg);
+}
+
+.nav-link {
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: #f1f5f9;
+    transition: background 0.15s;
+    border: 1px solid transparent;
+}
+
+.nav-link:hover {
+    background: #e2e8f0;
+}
+
+.nav-link--active {
+    outline: 1px solid var(--ring);
+    background: #c2c8cf;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: var(--space-6);
+}
+
+/* ---------- Typography ---------- */
+h1,
+h2,
+h3 {
+    margin: 0 0 var(--space-3);
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+h1 {
+    font-size: clamp(24px, 2.6vw, 28px);
+}
+
+h2 {
+    font-size: clamp(20px, 2.2vw, 22px);
+}
+
+h3 {
+    font-size: clamp(18px, 2vw, 20px);
+}
+
+p {
+    margin: 0 0 var(--space-2);
+}
+
+.muted {
+    color: var(--muted);
+    font-size: var(--fs-sm);
+}
+
+.text-sm {
+    font-size: var(--fs-sm);
+}
+
+.text-base {
+    font-size: var(--fs-base);
+}
+
+.text-lg {
+    font-size: var(--fs-lg);
+}
+
+/* key-value helpers (etiqueta + valor) */
+.kv-label {
+    color: var(--muted);
+    font-size: var(--fs-sm);
+    margin-bottom: 2px;
+}
+
+.kv-value {
+    font-weight: 600;
+}
+
+/* section helpers */
+.card-title {
+    font-size: var(--fs-xl);
+    font-weight: 700;
+}
+
+.section {
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-3);
+}
+
+.section-title {
+    font-size: var(--fs-lg);
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+}
+
+/* ---------- Lists (consistentes en todo el sitio) ---------- */
+ul,
+ol {
+    margin: 0 0 var(--space-2);
+    padding-left: 1.25rem;
+}
+
+ul {
+    list-style: disc;
+}
+
+ol {
+    list-style: decimal;
+}
+
+li {
+    margin: 0 0 6px;
+}
+
+.list {
+    padding-left: 1.25rem;
+}
+
+/* para aplicar explícitamente si hace falta */
+.prose ul,
+.prose ol {
+    margin: 0 0 var(--space-2);
+}
+
+.prose li {
+    margin-bottom: 6px;
+}
+
+/* ---------- Forms ---------- */
+.label {
+    display: block;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.input,
+.select,
+.textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    outline: none;
+    font-size: var(--fs-base);
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+    border-color: var(--indigo-600);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+.textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background 0.15s, opacity 0.15s;
+    font-size: var(--fs-base);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn--primary {
+    background: var(--indigo-600);
+    color: #fff;
+}
+
+.btn--primary:hover {
+    background: var(--indigo-700);
+}
+
+.btn--muted {
+    background: #e2e8f0;
+}
+
+.btn--muted:hover {
+    background: #cbd5e1;
+}
+
+.btn--danger {
+    background: var(--rose-500);
+    color: #fff;
+}
+
+.btn--danger:hover {
+    background: var(--rose-600);
+}
+
+/* ---------- Avatars / footer ---------- */
+.avatar {
+    width: 112px;
+    height: 112px;
+    border-radius: 999px;
+    object-fit: cover;
+    box-shadow: 0 0 0 2px var(--ring);
+}
+
+.avatar--sm {
+    width: 96px;
+    height: 96px;
+}
+
+.footer {
+    font-size: 12px;
+    color: #6b7280;
+    text-align: center;
+}
+/* Links con icono (para redes) */
+.icon-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    border: 1px solid transparent;
+}
+.icon-link:hover {
+    background: #e2e8f0;
+}
